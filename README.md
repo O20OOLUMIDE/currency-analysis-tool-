@@ -22,6 +22,7 @@ Each stage is stored in its own folder to clearly demonstrate growth and profess
 Converts GBP → USD or EUR
 
 - Simple input handling
+  
 - Basic loop structure
 
 First working version of the tool
@@ -53,25 +54,26 @@ Folder: stage2_extended_converter/
 - Making the system easier to maintain
 
 
-  # Stage 4 - Data logging
-  - Sace conversions to .txt or .csv
+# Stage 4 - Data logging
+- Save conversions to .txt or .csv
  
-  - Add timestamps and session summaries
+- Add timestamps and session summaries
  
-  - Introduce basic analytics
+- Introduce basic analytics
+
  
-  # Stage 5 - API integration
-  - Fectch live exchange rates
+# Stage 5 - API integration
+- Fectch live exchange rates
  
-  - Manage/Handle network errros
+- Manage/Handle network errros
  
-  - Allows comparison between live vs stored data
+- Allows comparison between live vs stored data
  
 
-    # Stage 6 - GUI Version
-    - Build a Tkinter-based graphical interace
+# Stage 6 - GUI Version
+- Build a Tkinter-based graphical interace
    
-    - Make accessibility easier and UX 
+- Make accessibility easier and UX 
 
 
 ## Learning Goals
@@ -85,21 +87,21 @@ Folder: stage2_extended_converter/
 
 - Build a portfolio‑ready project for software engineering apprenticeships
 
-Demonstrate real engineering progression
+- Demonstrate real engineering progression
 
 
-Technologies Used
- -Python 3
+## Technologies Used
+-Python 3
 
 - Git & GitHub for version control
 
- Command‑line interface (CLI)
+- Command‑line interface (CLI)
 
 
-Author
-O2OOOLUMIDE  
-Aspiring Software Engineer
-Aims to build strong fundamentals through practical, staged projects. 
+## Author
+- O2OOOLUMIDE  
+- Aspiring Software Engineer
+- Aims to build strong fundamentals through practical, staged projects. 
 
 
 ## Why This Project Exists

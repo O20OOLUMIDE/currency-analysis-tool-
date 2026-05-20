@@ -1,5 +1,4 @@
-# Stage 2 → Tasks 1 & 2 Completed
-# Dictionary for rates + GBP validation subroutine
+# Currency converter system - STAGE 3 
 
 
 # SUBROUTINE TO VALIDATE USER INPUT
@@ -28,7 +27,12 @@ def validate_gbp():
 
 # SUBROUTINE FOR CURRENCY CONVERSION
 def convert(GBP, rate):
-    return GBP * rate 
+    return GBP * rate
+
+
+# SUBROUTINE TO PRINT RESULT
+def output_result(GBP, converted_amount, symbol):
+    print(f"£{GBP:.2f} is equal to {symbol}{converted_amount:.2f}\n")
 
 
 
@@ -38,13 +42,13 @@ def currency_converter():
     # Task 1: Dictionary for exchange rates
     currency_info = {
         "USD": {"rate": 1.25, "symbol": "$"}, 
-        "EUR": {"rate": 1.25, "symbol": "€"}, 
+        "EUR": {"rate": 1.15, "symbol": "€"}, 
         "JPY": {"rate": 212,  "symbol": "¥"}
     }
 
     conversions = 0  # counter
     print("__________________________________________")
-    print("Currency Converter Analysis Tool - Stage 2")
+    print("Currency Converter Analysis Tool - Stage 3")
     print("__________________________________________")
     print("Convert GBP into USD, EUR, or JPY.") 
     print("You can perform as many conversions as you like.")
@@ -77,10 +81,8 @@ def currency_converter():
         symbol = currency_info[choice]["symbol"]
 
         converted_amount = convert(GBP, rate)
-        print(f"£{GBP:.2F} is equal to {symbol}{converted_amount:.2f}\n")
-    
+        output_result(GBP, converted_amount, symbol) 
 
 
-
-# Run the program
+# Main program
 currency_converter()

@@ -1,4 +1,4 @@
-# Currency converter system - STAGE 3 
+# Currency converter system 
 
 
 from datetime import datetime
@@ -10,6 +10,102 @@ def log_conversion(GBP, converted_amount, symbol):
 
     with open("conversions.txt", "a") as file:
         file.write(f"{timestamp} - £{GBP:.2f} -> {symbol}{converted_amount:.2f}\n")
+
+
+# SUBROUTINE THAT READS THE CONVERSIONS.TXT LOG FILE AND RETURNS ALL SAVED CONVERSIONS LINES
+def read_log_file():
+    try:
+        with open("conversions.txt", "r") as file:
+            lines = file.readlines()
+
+        print("\n--- Log file contents ---")
+        for line in lines:
+            print(line.strip())
+
+        return lines
+
+
+    except FileNotFoundError:
+        print("No log file found yet. Do some conversions first!")
+        return []
+
+
+# SUBROUTINE THAT EXTRACTS ALL GBP VALUES FROM THE LOG FILE AND RETURNS AS FLOATS
+def extract_gbp_from_log(lines):
+    gbp_values = []
+
+    for line in lines:
+        try:
+            parts = line.split("£")[1]  # everything after the £
+            gbp_str = parts.split()[0]  # first number after £
+            gbp_value = float(gbp_str)  # convert to float 
+            gbp_values.append(gbp_value)
+
+        except (IndexError, ValueError):
+            continue # skip badly formatted lines
+
+    return gbp_values
+
+
+# SUBROUTINE THAT EXTRACTS ALL CURRENCY SYMBOLS FROM THE LOG FILE (e.g., $, €, ¥)
+def extract_currencies_from_log(lines):
+    currencies = []
+
+    for line in lines:
+        try:
+            # Split at the arrow -> and take the right side
+            right_side = line.split("->")[1]
+
+            # Split by space and take the first chunk (e.g., "$140.00")
+            currency_chunk = right_side.split()[0]
+
+            # The first character of that chunk is the currency symbol
+            currency_symbol = currency_chunk[0]
+
+            currencies.append(currency_symbol)
+
+        except (IndexError, ValueError):
+            continue
+
+    return currencies
+
+
+# SUBROUTINE THATAT CALCULATES LONG-TERM ANALYSIS FROM THE LOG FILE
+def calculate_log_analytics():
+    lines = read_log_files()
+
+    if not lines:
+        print("\nNo log data available to analyse.\n")
+        return
+
+    # Extract data
+    gbp_values = extract_gbp_from_log(lines)
+    currencies = extract_currencies_from_log(lines)
+
+    if not gbp_values:
+        print("\nLog file exists but contains no valid GBP data.\n")
+        return
+
+    # GBP analytics
+    highest = max(gbp_values)
+    lowest = min(gbp_values)
+    average = sum(gbp_values) / len(gbp_values)
+
+    # Currency popularity
+    currency_count = {}
+    for symbol in currencies:
+        currency_count[symbol} = currency_count.get(symbol, 0) + 1
+
+    most_popular = max(currency_count, key=currency_count.get)
+
+    # Output results
+    print("\n--- Log File Analytics (All Sessions) ---")
+    print(f"Highest GBP ever converted : £{highest:.2f}")
+    print(f"Lowest GBP ever converted: £{lowest:.2f}")
+    print(f"Average GBP across all sessions: £{average:.2f}")
+    print(f"Most popular currency overall: {most_popular}")
+    print("-----------------------------------------\n")
+    
 
 
 # SUBROUTINE TO VALIDATE USER INPUT
@@ -36,9 +132,11 @@ def validate_gbp():
             print("That is not a valid number. Please try again.\n")
 
 
+
 # SUBROUTINE FOR CURRENCY CONVERSION
 def convert(GBP, rate):
     return GBP * rate
+
 
 
 # SUBROUTINE TO PRINT RESULT
@@ -121,5 +219,6 @@ def currency_converter():
         log_conversion(GBP, converted_amount, symbol) 
 
 
+
 # Main program
-currency_converter()   
+currency_converter()  

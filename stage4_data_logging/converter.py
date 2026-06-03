@@ -1,4 +1,4 @@
-# Currency converter system 
+# Currency converter system - Stage 4
 
 
 from datetime import datetime
@@ -72,7 +72,7 @@ def extract_currencies_from_log(lines):
 
 # SUBROUTINE THATAT CALCULATES LONG-TERM ANALYSIS FROM THE LOG FILE
 def calculate_log_analytics():
-    lines = read_log_files()
+    lines = read_log_file()
 
     if not lines:
         print("\nNo log data available to analyse.\n")
@@ -94,7 +94,7 @@ def calculate_log_analytics():
     # Currency popularity
     currency_count = {}
     for symbol in currencies:
-        currency_count[symbol} = currency_count.get(symbol, 0) + 1
+        currency_count[symbol] = currency_count.get(symbol, 0) + 1
 
     most_popular = max(currency_count, key=currency_count.get)
 
@@ -161,7 +161,7 @@ def currency_converter():
     total_gbp = 0
     
     print("__________________________________________")
-    print("Currency Converter Analysis Tool - Stage 3")
+    print("Currency Converter Analysis Tool - Stage 4")
     print("__________________________________________")
     print("Convert GBP into USD, EUR, or JPY.") 
     print("You can perform as many conversions as you like.")
@@ -173,6 +173,7 @@ def currency_converter():
                        " •USD - US Dollars\n"
                        " •EUR - Euros\n"
                        " •JPY - Japanese Yen\n"
+                       " •4 - View log analytics\n"
                        "Either enter your choice or type Q to quit: "
         )
         choice = choice.strip().upper()
@@ -189,8 +190,12 @@ def currency_converter():
 
             print()
             print("Exiting the converter. Thank you for using the tool!")
-            
             break
+
+        if choice == "4":
+            print("\nLoading analytics...\n")
+            calculate_log_analytics()
+            continue
 
         if choice not in currency_info:
             print("That option isn’t recognised. Please choose one of the suggested inputs.\n")
@@ -221,4 +226,4 @@ def currency_converter():
 
 
 # Main program
-currency_converter()  
+currency_converter()

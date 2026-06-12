@@ -1,4 +1,4 @@
-# Currency converter system - Stage 4
+# Currency converter system - Stage 5
 
 import requests
 from datetime import datetime
@@ -69,6 +69,77 @@ def extract_currencies_from_log(lines):
             continue
 
     return currencies
+
+
+# SUBROUTINE THAT EXTRACTS EXCHANGE RATES FROM THE LOG FILE
+def extract_rates_from_log(lines):
+    rates = []
+
+    for line in lines:
+        try:
+            # Extract GBP amount
+            gbp_part = line.split("£")[1]
+            gbp_value = float(gbp_part.split()[0])
+
+            # Extract converted amount (after ->)
+            right_side = line.split("->")[1].strip()
+            converted_str = right_side[1:] # remove currency symbol
+            converted_value = float(converted_str)
+
+            # Calculate rate
+            rate = convetred_value / gbp_value
+            rates.append(rate)
+
+        except (IndexError, ValueError):
+            continue # skip badly formatted lines
+
+    return rates 
+
+
+# SUBROUTINE TO CALCULATE STATISTICS FOR EXCHANGE RATES
+def calculate_rate_statistics(rates):
+    if len(rates) < 2:
+        return None # not enouh data to analyse
+
+    highest = max(rates)
+    lowest = min(rates)
+    average = sum(rates) / len(rates)
+
+    # Percentage change from first to last
+    percent_change = ((rates[-1]) - rates[0] / rates[0] * 100 )
+
+    # Standard deviation
+    mean = average
+    variance = sum((r - mean) ** 2 for r in rates) / len(rates)
+    std_dev = variance ** 0.5
+
+    return {
+        "highest": highest,
+        "lowest": lowest,
+        "average": average,
+        "percent_change": percent_change,
+        "std_dev": std_dev
+    }
+
+
+# SUBROUTINE TO DETERMINE TREND OF EXCHANGE RATES
+def determine_date_trend(rates):
+    if len(rates) < 2:
+        return "Not enough data"
+
+    start = rates[0]
+    end = rates[-1]
+
+    change = end - start
+
+    if abs(change) < 0.01:
+        return "Relatively Stable"
+    elif change > 0:
+        return "Increasing"
+    else:
+        return "Decreasing"
+
+    
 
 
 # SUBROUTINE THAT CALCULATES LONG-TERM ANALYSIS FROM THE LOG FILE

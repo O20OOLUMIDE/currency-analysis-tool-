@@ -1,4 +1,4 @@
-# Currency converter system - Stage 5
+# Currency converter system - Stage 4
 
 import requests
 from datetime import datetime
@@ -28,6 +28,15 @@ def read_log_file():
 
     except FileNotFoundError:
         print("No log file found yet. Do some conversions first!")
+        return []
+
+
+# SUBROUINE TO SILENCE READ LOG FUNCTION
+def read_log_file_silent():
+    try:
+        with open("conversions.txt", "r") as file:
+            return file.readlines()
+    except FileNotFoundError:
         return []
 
 
@@ -87,7 +96,7 @@ def extract_rates_from_log(lines):
             converted_value = float(converted_str)
 
             # Calculate rate
-            rate = convetred_value / gbp_value
+            rate = converted_value / gbp_value
             rates.append(rate)
 
         except (IndexError, ValueError):
@@ -106,7 +115,7 @@ def calculate_rate_statistics(rates):
     average = sum(rates) / len(rates)
 
     # Percentage change from first to last
-    percent_change = ((rates[-1]) - rates[0] / rates[0] * 100 )
+    percent_change = ((rates[-1] - rates[0]) / rates[0]) * 100
 
     # Standard deviation
     mean = average
@@ -123,7 +132,7 @@ def calculate_rate_statistics(rates):
 
 
 # SUBROUTINE TO DETERMINE TREND OF EXCHANGE RATES
-def determine_date_trend(rates):
+def determine_rate_trend(rates):
     if len(rates) < 2:
         return "Not enough data"
 
@@ -138,6 +147,35 @@ def determine_date_trend(rates):
         return "Increasing"
     else:
         return "Decreasing"
+
+
+# SUBROUTINE TO DISPLAY ANALYSIS OF EXCHANGE RATES
+def show_rate_analysis():
+    lines = read_log_file_silent()
+
+    if not lines:
+        print("\nNo log data available to analyse, \n")
+        return
+
+    rates = extract_rates_from_log(lines)
+
+    if len(rates) < 2:
+        print("\nNot enough rate data to analyse trends.\n")
+        return
+
+    stats = calculate_rate_statistics(rates)
+    trend = determine_rate_trend(rates)
+
+    print("\n--- Exhange Rate Analsis ---")
+    print(f"Highest Rate: {stats['highest']:.4f}")
+    print(f"Lowest Rate: {stats['lowest']:.4f}")
+    print(f"Average Rate: {stats['average']:.4f}")
+    print(f"Percentage Change: {stats['percent_change']:.2f}%")
+    print(f"Standard Deviation: {stats['std_dev']:.4f}")
+    print(f"Trend: {trend}")
+    print("--------------------------------\n")
+    
+          
 
     
 
@@ -275,8 +313,10 @@ def currency_converter():
                        " •EUR - Euros\n"
                        " •JPY - Japanese Yen\n"
                        " •4 - View log analytics\n"
-                       " •5 - Clear log file"
+                       " •5 - Clear log file\n"
+                       " •6 - View exchange rate analysis\n"
                        "Either enter your choice or type Q to quit: "
+                       
         )
         choice = choice.strip().upper()
 
@@ -302,6 +342,11 @@ def currency_converter():
         if choice == "5":
             print("\nClearing log file...\n")
             clear_log_file()
+            continue
+
+        if choice == "6":
+            print("\nLoading exchange rate analysis...\n")
+            show_rate_analysis()
             continue
 
         if choice not in currency_info:
@@ -333,4 +378,4 @@ def currency_converter():
 
 
 # Main program
-currency_converter()  
+currency_converter() 

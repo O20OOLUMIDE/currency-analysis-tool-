@@ -1,4 +1,4 @@
-# Currency converter system - Stage 4
+# Currency converter system - Stage 6
 
 import requests
 from datetime import datetime
@@ -385,8 +385,72 @@ def start_gui():
     window.geometry("400x300") # width x height
 
     # Temporary label so you can see the window is working
-    label = tk.Label(window, text="GUI is ruunning!", font=("Arial", 14))
+    label = tk.Label(window, text="GUI is running!", font=("Arial", 14))
     label.pack(pady=20)
+
+    # GBP input label
+    gbp_label = tk.Label(window, text="Enter amount in GBP:", font=("Arial", 12))
+    gbp_label.pack(pady=5)
+
+    # GBP input entry box
+    gbp_entry = tk.Entry(window, text="Enter amount in GBP:", font=("Arial", 12))
+    gbp_entry.pack(pady=5)
+
+    # Label for currency selection
+    currency_label = tk.Label(window, text="Choose currency:", font=("Arial", 12))
+    currency_label.pack(pady=5)
+
+    # Dropdown menu for currency selection
+    currency_var = tk.StringVar(window)
+    currency_var.set("USD") # default value
+
+    currency_dropdown = tk.OptionMenu(window, currency_var, "USD", "EUR", "JPY")
+    currency_dropdown.pack(pady=5)
+
+    # Results label (for showing output)
+    result_label = tk.Label(window, text="", font=("Arial", 12))
+    result_label.pack(pady=10)
+
+    # Function that runs when the convert button is clicked 
+    def perform_conversion():
+        try:
+            # Get GBP input
+            gbp_amount = float(gbp_entry.get())
+
+            if gbp_amount <= 0:
+                result_label.config(text="Please enter a positive number.")
+                return
+
+            # Get selected currency
+            chosen_currency = currency_var.get()
+
+            # Fetch live rates
+            live_rates = get_live_rates()
+            rate = live_rates[chosen_currency]
+
+            # Convert
+            converted_amount = convert(gbp_amount, rate)
+
+            # Log conversion
+            symbol = {"USD": "$", "EUR": "€", "JPY": "¥"}[chosen_currency]
+            log_conversion(gbp_amount, converted_amount, symbol)
+
+            # Display result
+            result_label.config(
+                text=f"£{gbp_amount:.2f} = {symbol}{converted_amount:.2f}"
+            )
+
+        except ValueError:
+            result_label.config(text="Invalid input. Please enter a number. ")
+
+    # Convert button
+    convert_button = tk.Button(
+        window,
+        text="Convert",
+        font=("Arial", 12),
+        command=perform_conversion
+    )
+    convert_button.pack(pady=10)
 
     window.mainloop()
 
